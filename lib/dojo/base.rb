@@ -1,7 +1,7 @@
 module Dojo
   class Base
-    def self.starting_dojo!
-      "starting dojo"
+    def self.price(tab)
+      nil
     end
   end
 end
