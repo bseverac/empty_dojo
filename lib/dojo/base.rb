@@ -1,15 +1,13 @@
+require 'matrix'
+
 module Dojo
   class Base
-    DISCOUNTS = [0, 0, 0.05, 0.1, 0.2, 0.25]
 
     def self.price(books)
       price = 0.0
       cluster = optimize_cluster cluster_books(books)
-      cluster.each_with_index do |count, index|
-        nb_book = index+1
-        price += (1-discount( nb_book))*count*nb_book*8
-      end
-      price
+      price = [8, 2*8 *0.95,3*8*0.9,4*8*0.8,5*8*0.75]
+      (Matrix.row_vector(cluster)*Matrix.column_vector(price)).element(0,0)
     end
 
     def self.cluster_books(books)
@@ -36,9 +34,6 @@ module Dojo
       end
     end
 
-    def self.discount(unique_books)
-      DISCOUNTS[unique_books]
-    end
 
   end
 end
