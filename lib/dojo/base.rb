@@ -4,11 +4,30 @@ module Dojo
 
     def self.price(books)
       price = 0.0
+      cluster = optimize_cluster cluster_books(books)
+      cluster.each_with_index do |count, index|
+        nb_book = index+1
+        price += (1-discount( nb_book))*count*nb_book*8
+      end
+      price
+    end
+
+    def self.cluster_books(books)
+      cluster = [0] * 5
       while(books.uniq.size > 1)
-        price += self.discounted(books)*books.uniq.size*8
+        cluster[books.uniq.size-1] += 1
         remove_uniq!(books)
       end
-      price += books.size * 8
+      cluster[0] += books.size
+      cluster
+    end
+
+    def self.optimize_cluster(cluster)
+      offset = [cluster[2], cluster[4]].min
+      cluster[2] -= offset
+      cluster[4] -= offset
+      cluster[3] += offset * 2
+      cluster
     end
 
     def self.remove_uniq!(books)
@@ -19,10 +38,6 @@ module Dojo
 
     def self.discount(unique_books)
       DISCOUNTS[unique_books]
-    end
-
-    def self.discounted(books)
-      1 - discount(books.uniq.size)
     end
 
   end

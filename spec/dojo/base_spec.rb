@@ -55,13 +55,23 @@ describe Dojo::Base do
     subject.price([0, 0, 1, 1, 2, 2, 3, 4]).must_equal 2 * (8 * 4 * 0.8)
   end
 
-  # it 'chooses the max discount on a trickier case' do
-  #   subject.price([0, 0, 0, 0, 0,
-  #                  1, 1, 1, 1, 1,
-  #                  2, 2, 2, 2,
-  #                  3, 3, 3, 3, 3,
-  #                  4, 4, 4, 4]).
-  #     must_equal 3 * (8 * 5 * 0.75) + 2 * (8 * 4 * 0.8)
-  # end
+  it 'builds a cluster of books' do
+    subject.cluster_books([0,0,1,1]).must_equal([0,2,0,0,0])
+    subject.cluster_books([1,2,3,4,1]).must_equal([1,0,0,1,0])
+    subject.cluster_books([0,1,2,3,4]).must_equal([0,0,0,0,1])
+  end
+
+  it 'builds the cheapest cluster of books' do
+    subject.optimize_cluster([5, 6, 2, 7, 1]).must_equal([5, 6, 1, 9, 0])
+  end
+
+  it 'chooses the max discount on a trickier case' do
+    subject.price([0, 0, 0, 0, 0,
+                   1, 1, 1, 1, 1,
+                   2, 2, 2, 2,
+                   3, 3, 3, 3, 3,
+                   4, 4, 4, 4]).
+      must_equal 3 * (8 * 5 * 0.75) + 2 * (8 * 4 * 0.8)
+  end
 
 end
