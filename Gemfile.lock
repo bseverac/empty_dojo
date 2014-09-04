@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dojo (0.1.2)
+    dojo (0.1)
 
 GEM
   remote: https://rubygems.org/

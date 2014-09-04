@@ -3,22 +3,23 @@ module Dojo
   class Base
 
     def line_size
-      15
+      14
     end
 
     def word_list
       [
         ["il est "],
-        ["une","deux","trois","quatre","cinq","six","sept","huit","neuf", "dix" ,"onze" ],
-        ["midi","minuit"],
-        [" heures"],
+        #["une","deux","trois","quatre","cinq","six","sept","huit","neuf", "dix" ,"onze","midi","minuit"], #5 8 #5 12
+        ["une","deux","septroisix","cinquatre","huit","neuf", "onze","midix","minuit"], #*4 0 #*4 4
+        ["heures"],
         [" moins"],
         ["et"],["le"],
-        ["demi","dix","vingt","trente","quarante","cinquante"],
-        ["et"],
-        ["quart"],
-        ["une","deux","cinq","quatre","sept","trois","six","neuf","onze","douze", "huit","treize", "quatorze", "seize" ],
-        [" minutes"]
+        #["demi","dix","vingt","trente","quarante","cinquante"],#8 5 #*8 8
+        ["demi","dix","vingtrente","quarante","cinquante"],#8 6* #8 7
+        [" et "],
+        #*13 3 #*13 11
+        ["quatre","huitroisix","septreize", "une","deux","cinquart","neuf","onze","douze","quatorze", "seize" ],
+        [" minutes"]#14 6 #13 3
       ]
     end
 
@@ -35,26 +36,33 @@ module Dojo
       string_to_word_square(final_string)
     end
 
+    def best_line
+      ((word_list.flatten.map {|element| element.length}).inject(:+)/line_size.to_f).ceil
+    end
+
     def string_to_word_square(string)
       w_l = word_list
       current_line = 0
       square_string = ''
+      nb_line = 1
       string.chars.to_a.each do |ch|
         w_l.delete [] if w_l.first.empty?
         w_l.first.each do |word|
-          if word.size == ch.to_i
-            if current_line + ch.to_i <= line_size
-              current_line += ch.to_i
+          if word.size == ch.ord
+            if current_line + ch.ord <= line_size
+              current_line += ch.ord
               square_string += word
             else
+              nb_line += 1
               square_string += $/+word
-              current_line = ch.to_i
+              current_line = ch.ord
             end
             w_l.first.delete word
             break
           end
         end
       end
+      puts "#{line_size}x#{nb_line} vs #{line_size}x#{best_line}"
       puts square_string
     end
 
@@ -64,10 +72,10 @@ module Dojo
 
     def compute_string_permutation(str,current_line = 0,nb_line = 0)
       str.chars.to_a.each do |ch|
-        if current_line + ch.to_i <= line_size
-          current_line += ch.to_i
+        if current_line + ch.ord <= line_size
+          current_line += ch.ord
         else
-          current_line = ch.to_i
+          current_line = ch.ord
           nb_line +=1
         end
       end
@@ -86,11 +94,7 @@ module Dojo
     end
 
     def word_tab_to_length_tab(tab)
-      result = []
-      tab.each do |val|
-        result.push val.size.to_s
-      end
-      result
+      tab.map {|element| element.size.chr}
     end
 
     def optimize(x)
