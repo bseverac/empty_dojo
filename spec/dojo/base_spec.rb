@@ -7,7 +7,7 @@ describe Dojo::Base do
   end
 
   it 'must say we starting dojo' do
-    Dojo::Base.starting_dojo!.must_equal "starting dojo"
+    @base.tell_me_the_truth
   end
 
 end
